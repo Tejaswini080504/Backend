@@ -4,26 +4,11 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 import numpy as np
 from PIL import Image
-from smtp import gmail_transfer
-from flask_mail import Mail, Message
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
-
-gmail = os.getenv('EMAIL')
-passwo = os.getenv('PASSWORD')
 
 app = Flask(__name__)
 CORS(app)
 
-app.config['MAIL_SERVER']= 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = gmail
-app.config['MAIL_PASSWORD'] = passwo
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
-mail = Mail(app)
 
 model = load_model("model.h5") 
 
@@ -46,10 +31,7 @@ def predict():
     prediction = model.predict(processed_image)
     label = np.argmax(prediction, axis=1)[0]
     index = ['Mild Demented', 'Moderate Demented', 'Non Demented', 'Very Mild Demented']
-    # gmail_transfer(request.form.get('email'),request.form.get('name'),index[label])
-    msg = Message(subject=f"Hi {name}, Here is your report from Alzheimer's Disease Website", sender='tejaswinimaddirala@gmail.com', recipients=[email])
-    msg.body = f"Dear {name},\n\nThe predicted stage of your Alzheimer's disease is {index[label]}\n"
-    mail.send(msg)
+    
     return jsonify({'prediction': index[label]})
 
 if __name__ == '__main__':
