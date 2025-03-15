@@ -12,6 +12,11 @@ CORS(app)
 
 model = load_model("model.h5") 
 
+@app.route('/health', methods = ['POST'])
+def health():
+    text = 'koushik'
+    return jsonify({'prediction': text })
+
 def preprocess_image(image, target_size):
     image = Image.open(image)
     if image.mode != 'RGB':
