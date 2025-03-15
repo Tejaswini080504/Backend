@@ -12,7 +12,7 @@ CORS(app)
 
 model = load_model("model.h5") 
 
-@app.route('/health', methods = ['POST'])
+@app.route('/health', methods = ['GET'])
 def health():
     text = 'koushik'
     return jsonify({'prediction': text })
